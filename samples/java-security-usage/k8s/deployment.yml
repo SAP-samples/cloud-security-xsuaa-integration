@@ -1,4 +1,128 @@
 ---
+###  SERVICE INSTANCE CONFIGURATION  ###
+# Xsuaa instance
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: xsuaa-java-security
+  namespace: <YOUR NAMESPACE>
+spec:
+  clusterServiceClassExternalName: xsuaa
+  clusterServicePlanExternalName: application
+  parameters:
+    xsappname: xsuaa-java-security
+    tenant-mode: dedicated
+    scopes:
+      - name: "$XSAPPNAME.Read"
+        description: "Read Permissions."
+    role-templates:
+      - name: Viewer
+        description: View Data
+        scope-references:
+          - "$XSAPPNAME.Read"
+    role-collections:
+      - name: JAVA_SECURITY_SAMPLE_Viewer
+        description: Viewer (read)
+        role-template-references:
+          - "$XSAPPNAME.Viewer"
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: xsuaa-service-binding
+  namespace: <YOUR NAMESPACE>
+spec:
+  instanceRef:
+    name: xsuaa-java-security
+---
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: xsuaa-service-binding-usage
+  namespace: <YOUR NAMESPACE>
+spec:
+  parameters:
+    envPrefix:
+      name: xsuaa_
+  serviceBindingRef:
+    name: xsuaa-service-binding
+  usedBy:
+    kind: deployment
+    name: java-security-usage
+---
+# Xsuaa broker instance
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: xsuaa-broker
+  namespace: <YOUR NAMESPACE>
+spec:
+  clusterServiceClassExternalName: xsuaa
+  clusterServicePlanExternalName: broker
+  parameters:
+    xsappname: xsuaa-broker
+    tenant-mode: dedicated
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: xsuaa-broker-binding
+  namespace: <YOUR NAMESPACE>
+spec:
+  instanceRef:
+    name: xsuaa-broker
+---
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: xsuaa-broker-binding-usage
+  namespace: <YOUR NAMESPACE>
+spec:
+  parameters:
+    envPrefix:
+      name: xsuaa_
+  serviceBindingRef:
+    name: xsuaa-broker-binding
+  usedBy:
+    kind: deployment
+    name: java-security-usage
+---
+# Service manager instance
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: service-manager
+  namespace: <YOUR NAMESPACE>
+spec:
+  clusterServiceClassExternalName: service-manager
+  clusterServicePlanExternalName: subaccount-admin
+  parameters:
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: service-manager-binding
+  namespace: <YOUR NAMESPACE>
+spec:
+  instanceRef:
+    name: service-manager
+---
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: service-manager-binding-usage
+  namespace: <YOUR NAMESPACE>
+spec:
+  parameters:
+    envPrefix:
+      name: sm_
+  serviceBindingRef:
+    name: service-manager-binding
+  usedBy:
+    kind: deployment
+    name: java-security-usage
+---
+###  APPLICATION CONFIGURATION  ###
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,23 +153,25 @@ spec:
               containerPort: 8080
           volumeMounts:
             - name: xsuaa
-              mountPath: "/etc/secrets/sapcp/xsuaa/xsuaa-instance"
+              mountPath: "/etc/secrets/sapcp/xsuaa/xsuaa-java-security"
               readOnly: true
-            - name: xsuaa2
-              mountPath: "/etc/secrets/sapcp/xsuaa/xsuaa-instance-1"
+            - name: xsuaa-broker
+              mountPath: "/etc/secrets/sapcp/xsuaa/xsuaa-broker"
+              readOnly: true
+            - name: service-manager
+              mountPath: "/etc/secrets/sapcp/service-manager/sm"
               readOnly: true
 
-          envFrom:
-            - secretRef:
-                name: java-security-usage
-                optional: true
       volumes:
         - name: xsuaa
           secret:
-            secretName: <placeholder for secret name>
-        - name: xsuaa2
+              secretName: xsuaa-service-binding
+        - name: xsuaa-broker
           secret:
-            secretName: <placeholder for secret name>
+              secretName: xsuaa-broker-binding
+        - name: service-manager
+          secret:
+              secretName: service-manager-binding
 ---
 apiVersion: v1
 kind: Service
@@ -62,3 +188,30 @@ spec:
       targetPort: 8080
   selector:
     app: java-security-usage
+
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: java-security-api
+  namespace: <YOUR NAMESPACE>
+  labels:
+    app: java-security-usage
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+    - accessStrategies:
+        - config: {}
+          handler: allow
+      methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - HEAD
+      path: /.*
+  service:
+    host: java-security-api
+    name: java-security-usage
+    port: 80
