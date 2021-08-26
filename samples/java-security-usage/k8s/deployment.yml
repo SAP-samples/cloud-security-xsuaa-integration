@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: java-security-usage
+    kyma-grafana: enabled
+  name: java-security-usage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-security-usage
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: java-security-usage
+        kyma-grafana: enabled
+    spec:
+      containers:
+        - image: <placeholder for image repository>
+          imagePullPolicy: Always
+          name: java-security-usage
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: xsuaa
+              mountPath: "/etc/secrets/sapcp/xsuaa/xsuaa-instance"
+              readOnly: true
+            - name: xsuaa2
+              mountPath: "/etc/secrets/sapcp/xsuaa/xsuaa-instance-1"
+              readOnly: true
+            - name: service-manager
+              mountPath: "/etc/secrets/sapcp/service-manager/sm"
+              readOnly: true
+
+          envFrom:
+            - secretRef:
+                name: java-security-usage
+                optional: true
+      volumes:
+        - name: xsuaa
+          secret:
+            secretName: <placeholder for secret name>
+        - name: xsuaa2
+          secret:
+            secretName: <placeholder for secret name>
+        - name: service-manager
+          secret:
+            secretName: <placeholder for secret name>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: java-security-usage
+  name: java-security-usage
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: java-security-usage

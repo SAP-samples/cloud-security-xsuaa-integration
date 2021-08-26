@@ -32,4 +32,9 @@ public class TestController {
 		result.put("scopes", String.valueOf(token.getScopes()));
 		return result;
 	}
+
+	@GetMapping("/health")
+	public String checkHealth(){
+		return "OK";
+	}
 }

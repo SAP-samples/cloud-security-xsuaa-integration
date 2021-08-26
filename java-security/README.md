@@ -2,7 +2,7 @@
 
 Token Validation for Java applications.
 
-- Loads Identity Service Configuration from `VCAP_SERVICES` environment. The [`Environments`](src/main/java/com/sap/cloud/security/config/Environments.java) serves as central entry point to get or parse the  [`OAuth2ServiceConfiguration`](src/main/java/com/sap/cloud/security/config/OAuth2ServiceConfiguration.java) within SAP Cloud Platform.
+- Loads Identity Service Configuration from `VCAP_SERVICES` in Cloud Foundry or from secrets in Kubernetes environment. The [`Environments`](src/main/java/com/sap/cloud/security/config/Environments.java) serves as central entry point to get or parse the  [`OAuth2ServiceConfiguration`](src/main/java/com/sap/cloud/security/config/OAuth2ServiceConfiguration.java) within SAP Business Technology Platform.
 - Decodes and parses encoded JSON Web Tokens ([`Token`](/java-api/src/main/java/com/sap/cloud/security/token/Token.java)) and provides convenient access to token header parameters and claims. A Java implementation of JSON Web Token (JWT) - [RFC 7519](https://tools.ietf.org/html/rfc7519). 
 - Validates the decoded token. The [`JwtValidatorBuilder`](src/main/java/com/sap/cloud/security/token/validation/validators/JwtValidatorBuilder.java) comprises the following mandatory checks:
   - Is the JWT used before the `exp` (expiration) time and eventually is it used after the `nbf` (not before) time ([`JwtTimestampValidator`](
@@ -26,7 +26,7 @@ In case of XSUAA does the JWT provide a valid `jku` token header parameter that 
 
 ## Supported Environments
 - Cloud Foundry
-- Planned: Kubernetes
+- Kubernetes/Kyma
 
 ## Supported Identity Services
 - XSUAA
@@ -77,7 +77,7 @@ logger options.
 ```java
 OAuth2ServiceConfiguration serviceConfig = Environments.getCurrent().getXsuaaConfiguration();
 ```
-> Note: By default `Environments` auto-detects the environment: Cloud Foundry or Kubernetes.
+> Note: By default `Environments` auto-detects the environment: Cloud Foundry or Kubernetes. 
 
 Alternatively you can also specify the Service Configuration by your own:
 ```java
@@ -90,6 +90,20 @@ OAuth2ServiceConfiguration serviceConfig = OAuth2ServiceConfigurationBuilder.for
       .build();
 ```
 :bulb: `OAuth2ServiceConfiguration.getClientIdentity()` is a convenience method that with `OAuth2ServiceConfigurationBuilder` implementation will resolve `ClientCredentials` or `ClientCertificate` implementations of `ClientIdentity` interface based on the `credential-type` from the Xsuaa service binding. Therefore, providing the correct implementation for the configured authentication type e.g. X.509 or client secret based.
+
+#### :mega: Service configuration in Kubernetes environment 
+To access service instance configurations from the application, Kubernetes secrets need to be provided as files in a volume mounted on application's container. 
+By default, library will search the configuration files in the following paths:
+- XSUAA: `/etc/secrets/sapcp/xsuaa/<YOUR XSUAA INSTANCE NAME>`
+- IAS: `/etc/secrets/sapcp/ias/<YOUR IAS INSTANCE NAME>`
+- Service-manager: `/etc/secrets/sapcp/service-manager/<YOUR SERVICE-MANAGER NAME>`
+
+:exclamation: service-manager binding is mandatory!
+
+It's possible to provide custom paths for Xsuaa and IAS:
+```java
+K8sEnvironment.getInstance(customXsuaaPath, customIasPath);
+```
 
 ### Setup Step 2: Setup Validators
 Now configure the `JwtValidatorBuilder` once with the service configuration from the previous step.

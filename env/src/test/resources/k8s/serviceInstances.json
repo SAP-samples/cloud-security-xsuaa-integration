@@ -1,0 +1,92 @@
+{
+  "num_items": 3,
+  "items": [
+    {
+      "id": "1307a163-b5cf-4c2c-8714-13ba5f072012",
+      "ready": true,
+      "name": "xsuaa-application",
+      "service_plan_id": "037e7df6-5843-4174-9cb4-69a1f9a4da7e",
+      "platform_id": "",
+      "context": {
+        "clusterid": "",
+        "instance_name": "xsuaa-application",
+        "namespace": "dev",
+        "platform": "sapcp",
+        "zone_id": "",
+        "global_account_id": "sap",
+        "subdomain": "",
+        "crm_customer_id": "",
+        "origin": "kubernetes",
+        "license_type": "SAPDEV",
+        "subaccount_id": "",
+        "region": ""
+      },
+      "usable": true,
+      "created_at": "2021-07-14T13:58:07.067851Z",
+      "updated_at": "2021-07-14T13:58:07.067851Z",
+      "labels": {
+        "subaccount_id": [
+          ""
+        ]
+      }
+    },
+    {
+      "id": "73643785-56da-4165-b6b3-d13cc571be7f",
+      "ready": true,
+      "name": "xsuaa-broker",
+      "service_plan_id": "bb769fcb-c8b9-4612-beac-18be9743a3b7",
+      "platform_id": "",
+      "context": {
+        "clusterid": "",
+        "instance_name": "xsuaa-broker",
+        "namespace": "dev",
+        "platform": "sapcp",
+        "subdomain": "",
+        "region": "",
+        "crm_customer_id": "",
+        "global_account_id": "sap",
+        "license_type": "SAPDEV",
+        "subaccount_id": "",
+        "origin": "kubernetes",
+        "zone_id": ""
+      },
+      "usable": true,
+      "created_at": "2021-07-28T12:06:34.34308Z",
+      "updated_at": "2021-07-28T12:06:34.34308Z",
+      "labels": {
+        "subaccount_id": [
+          ""
+        ]
+      }
+    },
+    {
+      "id": "d3c68611-c8a0-4c96-ac0c-1edd0ac3d2ef",
+      "ready": true,
+      "name": "service-manager",
+      "service_plan_id": "ca8adb0e-d560-41aa-bf63-12ec2af02035",
+      "platform_id": "",
+      "context": {
+        "clusterid": "",
+        "instance_name": "service-manager",
+        "namespace": "dev",
+        "platform": "sapcp",
+        "zone_id": "",
+        "crm_customer_id": "",
+        "subdomain": "",
+        "region": "",
+        "origin": "kubernetes",
+        "global_account_id": "sap",
+        "license_type": "SAPDEV",
+        "subaccount_id": ""
+      },
+      "usable": true,
+      "created_at": "2021-07-28T15:19:20.17765Z",
+      "updated_at": "2021-07-28T15:19:20.17765Z",
+      "labels": {
+        "subaccount_id": [
+          ""
+        ]
+      }
+    }
+  ]
+}

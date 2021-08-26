@@ -48,7 +48,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		http.authorizeRequests()
 				.antMatchers("/hello-token").hasAuthority("Display")
-				.anyRequest().authenticated()
+				.antMatchers("/health").permitAll()
+				.anyRequest().denyAll()
 			.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -79,5 +80,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		converter.setLocalScopeAsAuthorities(true);
 		return converter;
 	}
-
 }

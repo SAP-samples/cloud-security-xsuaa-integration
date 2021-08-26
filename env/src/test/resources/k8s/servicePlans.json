@@ -1,0 +1,120 @@
+{
+  "num_items": 3,
+  "items": [
+    {
+      "id": "037e7df6-5843-4174-9cb4-69a1f9a4da7e",
+      "ready": true,
+      "name": "application",
+      "description": "Application plan to be used for business applications",
+      "catalog_id": "ThGdx5loQ6XhvcdY6dLlEXcTgQD7641pDKXJfzwYGLg=",
+      "catalog_name": "application",
+      "free": true,
+      "bindable": true,
+      "metadata": {
+        "supportedPlatforms": [
+          "cloudfoundry",
+          "sapcp",
+          "kubernetes"
+        ],
+        "supportedMinOSBVersion": "2.11",
+        "sibling_resolution": {
+          "resolution_property": "siblingIds",
+          "name_paths": [
+            "scopes.#.granted-apps",
+            "scopes.#.grant-as-authority-to-apps",
+            "foreign-scope-references",
+            "authorities",
+            "role-collections.#.role-template-references"
+          ],
+          "value_regexp": "\\$XSSERVICENAME\\((.*)\\)",
+          "enabled": true
+        },
+        "bullets": [
+          "Tenant isolation",
+          "Supports different OAuth flows (Client credentials, authorization code, SAML bearer assertion)",
+          "One OAuth client per service instance"
+        ],
+        "supportedMaxOSBVersion": "2.14"
+      },
+      "service_offering_id": "a3199d59-3fdc-41f5-a258-8ea36ff26762",
+      "created_at": "2019-06-26T13:51:49.854908Z",
+      "updated_at": "2021-08-02T09:32:35.244776Z",
+      "labels": {
+        "complementary": [
+          "true"
+        ]
+      }
+    },
+    {
+      "id": "bb769fcb-c8b9-4612-beac-18be9743a3b7",
+      "ready": true,
+      "name": "broker",
+      "description": "Broker plan to be used by business reuse services / service brokers",
+      "catalog_id": "HWEgt9/jJGFjzT8j+/x9pGivrAuKbUMUK8PgWEx3cLY=",
+      "catalog_name": "broker",
+      "free": true,
+      "bindable": true,
+      "metadata": {
+        "supportedPlatforms": [
+          "cloudfoundry",
+          "sapcp",
+          "kubernetes"
+        ],
+        "supportedMinOSBVersion": "2.11",
+        "sibling_resolution": {
+          "resolution_property": "siblingIds",
+          "name_paths": [
+            "scopes.#.granted-apps",
+            "scopes.#.grant-as-authority-to-apps",
+            "foreign-scope-references",
+            "authorities",
+            "role-collections.#.role-template-references"
+          ],
+          "value_regexp": "\\$XSSERVICENAME\\((.*)\\)",
+          "enabled": true
+        },
+        "bullets": [
+          "Tenant isolation",
+          "Supports different OAuth flows (Client credentials, user token)",
+          "One OAuth client for the reuse service itself + one per instance of the reuse service"
+        ],
+        "supportedMaxOSBVersion": "2.14"
+      },
+      "service_offering_id": "a3199d59-3fdc-41f5-a258-8ea36ff26762",
+      "created_at": "2019-06-26T13:51:49.854908Z",
+      "updated_at": "2021-08-02T09:32:35.190203Z",
+      "labels": {
+        "complementary": [
+          "true"
+        ]
+      }
+    },
+    {
+      "id": "b0fd827c-2391-4619-bfb8-56b8b1dc197b",
+      "ready": true,
+      "name": "application",
+      "description": "Register an application into your Identity Authentication tenant",
+      "catalog_id": "86af6685-7bae-40b8-b564-378284c8fcc9",
+      "catalog_name": "application",
+      "free": true,
+      "bindable": true,
+      "metadata": {
+        "sibling_resolution": {
+          "names_path": "consumed-services.#.service-instance-name",
+          "resolution_property": "siblingIds",
+          "enabled": true
+        },
+        "supportedMinOSBVersion": "2.11",
+        "supportedMaxOSBVersion": "2.15"
+      },
+      "service_offering_id": "b518cc1f-8523-4331-b7a1-d6f196854b05",
+      "created_at": "2020-10-28T11:53:29.219855Z",
+      "updated_at": "2021-08-02T09:25:26.195847Z",
+      "labels": {
+        "commercial_name": [
+          "application"
+        ]
+      }
+    }
+  ]
+}

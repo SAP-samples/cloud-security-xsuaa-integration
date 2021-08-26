@@ -18,7 +18,7 @@ public interface Environment {
 	 * Represents a supported SAP CP environment.
 	 */
 	enum Type {
-		CF /* , KUBERNETES */;
+		CF, KUBERNETES;
 
 		public static Type from(String typeAsString) {
 			return Type.valueOf(typeAsString.toUpperCase());

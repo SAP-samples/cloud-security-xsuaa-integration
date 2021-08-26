@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: spring-security-basic-auth
+    kyma-grafana: enabled
+  name: spring-security-basic-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-security-basic-auth
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: spring-security-basic-auth
+        kyma-grafana: enabled
+    spec:
+      containers:
+        - image: <placeholder for image repository>
+          imagePullPolicy: Always
+          name: spring-security-basic-auth
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: xsuaa
+              mountPath: "/etc/secrets/sapcp/xsuaa/xsuaa-instance"
+              readOnly: true
+            - name: xsuaa2
+              mountPath: "/etc/secrets/sapcp/xsuaa/xsuaa-instance-2"
+              readOnly: true
+
+          envFrom:
+            - secretRef:
+                name: spring-security-basic-auth
+                optional: true
+      volumes:
+        - name: xsuaa
+          secret:
+              secretName: <placeholder for secret name>
+        - name: xsuaa2
+          secret:
+              secretName: <placeholder for secret name>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: spring-security-basic-auth
+  name: spring-security-basic-auth
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: spring-security-basic-auth
