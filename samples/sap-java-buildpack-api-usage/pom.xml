@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sap.cloud.security.xssec.samples</groupId>
 	<artifactId>sap-java-buildpack-api-usage</artifactId>
-	<version>2.10.5</version>
+	<version>2.10.6</version>
 	<packaging>war</packaging>
 
 	<properties>

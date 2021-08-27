@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sap.cloud.security.xssec.samples</groupId>
     <artifactId>java-security-usage</artifactId>
-    <version>2.10.5</version>
+    <version>2.10.6</version>
     <packaging>war</packaging>
 
     <!--profiles>
@@ -27,7 +27,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <sap.cloud.security.version>2.10.5</sap.cloud.security.version>
+        <sap.cloud.security.version>2.10.6</sap.cloud.security.version>
         <slf4j.api.version>1.7.30</slf4j.api.version>
         <apache.httpclient.version>4.5.13</apache.httpclient.version>
         <javax.servlet.api.version>4.0.1</javax.servlet.api.version>

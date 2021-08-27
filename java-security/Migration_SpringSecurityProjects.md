@@ -37,19 +37,19 @@ First make sure you have the following dependencies defined in your pom.xml:
 <dependency>
   <groupId>com.sap.cloud.security.xsuaa</groupId>
   <artifactId>api</artifactId>
-  <version>2.10.5</version>
+  <version>2.10.6</version>
 </dependency>
 <dependency>
   <groupId>com.sap.cloud.security</groupId>
   <artifactId>java-security</artifactId>
-  <version>2.10.5</version>
+  <version>2.10.6</version>
 </dependency>
 
 <!-- new java-security dependencies for unit tests -->
 <dependency>
   <groupId>com.sap.cloud.security</groupId>
   <artifactId>java-security-test</artifactId>
-  <version>2.10.5</version>
+  <version>2.10.6</version>
   <scope>test</scope>
 </dependency>
 ```

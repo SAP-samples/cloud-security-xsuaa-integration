@@ -23,7 +23,7 @@ The Resource owner password credentials (i.e., username and password) can be use
 <dependency>
     <groupId>com.sap.cloud.security.xsuaa</groupId>
     <artifactId>token-client</artifactId>
-    <version>2.10.5</version>
+    <version>2.10.6</version>
 </dependency>
 <dependency>
   <groupId>org.apache.httpcomponents</groupId>
@@ -83,7 +83,7 @@ By default, the `DefaultOAuth2TokenService` caches tokens internally. The Cache 
 <dependency>
     <groupId>com.sap.cloud.security.xsuaa</groupId>
     <artifactId>token-client</artifactId>
-    <version>2.10.5</version>
+    <version>2.10.6</version>
 </dependency>
 <dependency>
     <groupId>org.springframework</groupId>
@@ -136,7 +136,7 @@ In context of a Spring Boot application you may like to leverage auto-configurat
 <dependency>
     <groupId>com.sap.cloud.security.xsuaa</groupId>
     <artifactId>xsuaa-spring-boot-starter</artifactId>
-    <version>2.10.5</version>
+    <version>2.10.6</version>
 </dependency>
 <dependency> <!-- required when using Spring Web `RestTemplate` with X.509 authentication method-->
   <groupId>org.apache.httpcomponents</groupId>

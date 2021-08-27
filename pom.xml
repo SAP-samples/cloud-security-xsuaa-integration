@@ -7,7 +7,7 @@
 
 	<groupId>com.sap.cloud.security.xsuaa</groupId>
 	<artifactId>parent</artifactId>
-	<version>2.10.5</version>
+	<version>2.10.6</version>
 	<packaging>pom</packaging>
 
 	<name>parent</name>

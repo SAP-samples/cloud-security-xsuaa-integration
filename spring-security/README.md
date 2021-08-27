@@ -34,7 +34,7 @@ These (spring) dependencies needs to be provided:
 <dependency>
     <groupId>com.sap.cloud.security</groupId>
     <artifactId>resourceserver-security-spring-boot-starter</artifactId>
-    <version>2.10.5</version>
+    <version>2.10.6</version>
 </dependency>
 <dependency>
     <groupId>org.apache.httpcomponents</groupId>
@@ -173,7 +173,7 @@ XsuaaServiceConfigurations xsuaaServiceConfigurations;
 IdentityServiceConfiguration identityServiceConfiguration;
 ```
 
-Alternatively, you can also access the information with `Environments.getCurrent()`, which is provided with `java-security`.
+Alternatively, you can also access the information with `Environments.getCurrent()`, which is provided with `com.sap.cloud.security:env` client library.
 
 ### [Optional] Audit Logging
 In case you have implemented a central Exception Handler as described with [Baeldung Tutorial: Error Handling for REST with Spring](https://www.baeldung.com/exception-handling-for-rest-with-spring) you may want to emit logs to the audit log service in case of `AccessDeniedException`s.

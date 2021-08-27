@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 2.10.6
+- [token-client] 
+  - `XsuaaTokenFlows` constructor accepts `com.sap.cloud.security.xsuaa.client.ClientCredentials` as argument.
+- [env]
+  The extraction of `OAuth2ServiceConfiguration` for xsuaa oder ias identity provider is moved into `com.sap.cloud.security:env` client library.
+- [spring-xsuaa] `LocalAuthoritiesExtractor` supports also `appId`s that contains pipe (`|`) characters.
+
 ## 2.10.5
 - [token-client] 
   - `XsuaaTokenFlows` constructor accepts `com.sap.cloud.security.xsuaa.client.ClientCredentials` as argument.
