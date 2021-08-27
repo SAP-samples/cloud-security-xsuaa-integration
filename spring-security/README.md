@@ -1,6 +1,6 @@
-# SAP CP Spring Security Client Library
+# SAP BTP Spring Security Client Library
 
-Token Validation for Spring Boot applications. It integrates [```java-security```](/java-security) to Spring Security Framework to support validations for tokens issued by these SAP Cloud Platform identity services: `xsuaa` and `identity`.
+Token Validation for Spring Boot applications. It integrates [```java-security```](/java-security) to Spring Security Framework to support validations for tokens issued by these SAP Business Technology Platform identity services: `xsuaa` and `identity`.
 
 It fully integrates with [Spring Security OAuth 2.0 Resource Server](https://docs.spring.io/spring-security/site/docs/current/reference/html5/#oauth2resourceserver).
 - The credentials from the identity services can be configured as configuration properties.
@@ -9,7 +9,7 @@ It fully integrates with [Spring Security OAuth 2.0 Resource Server](https://doc
 
 ## Supported Environments
 - Cloud Foundry
-- Planned: Kubernetes
+- Kubernetes/Kyma
 
 ## Supported Identity Services
 - XSUAA
@@ -23,6 +23,15 @@ It fully integrates with [Spring Security OAuth 2.0 Resource Server](https://doc
 
 
 ## Configuration
+
+### :mega: Service configuration in Kubernetes/Kyma environment 
+To access service instance configurations from the application, Kubernetes secrets need to be provided as files in a volume mounted on application's container. 
+By default, library will search the configuration files in the following paths:
+- XSUAA: `/etc/secrets/sapcp/xsuaa/<YOUR XSUAA INSTANCE NAME>`
+- IAS: `/etc/secrets/sapcp/ias/<YOUR IAS INSTANCE NAME>`
+- Service-manager: `/etc/secrets/sapcp/service-manager/<YOUR SERVICE-MANAGER NAME>`
+
+:exclamation: service-manager binding is mandatory!
 
 ### Maven Dependencies
 These (spring) dependencies needs to be provided:

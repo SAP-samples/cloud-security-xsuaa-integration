@@ -60,7 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	class MyCustomTokenAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
 		public AbstractAuthenticationToken convert(Jwt jwt) {
-			if(jwt.containsClaim(TokenClaims.XSUAA.EXTERNAL_ATTRIBUTE)) {
+			if(jwt.hasClaim(TokenClaims.XSUAA.EXTERNAL_ATTRIBUTE)) {
 				return authConverter.convert(jwt);
 			}
 			return new AuthenticationToken(jwt, deriveAuthoritiesFromGroup(jwt));
@@ -68,7 +68,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 		private Collection<GrantedAuthority> deriveAuthoritiesFromGroup(Jwt jwt) {
 			Collection<GrantedAuthority> groupAuthorities = new ArrayList<>();
-			if (jwt.containsClaim(TokenClaims.GROUPS)) {
+			if (jwt.hasClaim(TokenClaims.GROUPS)) {
 				List<String> groups = jwt.getClaimAsStringList(TokenClaims.GROUPS);
 				for (String group: groups) {
 					groupAuthorities.add(new SimpleGrantedAuthority(group.replace("IASAUTHZ_", "")));

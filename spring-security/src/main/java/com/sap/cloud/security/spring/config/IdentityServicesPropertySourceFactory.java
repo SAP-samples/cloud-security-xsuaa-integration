@@ -7,7 +7,6 @@ package com.sap.cloud.security.spring.config;
 
 import com.sap.cloud.security.config.Environment;
 import com.sap.cloud.security.config.Environments;
-import com.sap.cloud.security.config.cf.CFEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.PropertiesPropertySource;
@@ -60,7 +59,7 @@ public class IdentityServicesPropertySourceFactory implements PropertySourceFact
 	@Override
 	@SuppressWarnings("squid:S2259") // false positive
 	public PropertySource<?> createPropertySource(String name, EncodedResource resource) throws IOException {
-		Environment environment = CFEnvironment.getInstance();
+		Environment environment = Environments.getCurrent();
 		if (resource != null
 				&& resource.getResource().getFilename() != null && !resource.getResource().getFilename().isEmpty()) {
 			environment = Environments.readFromInput(resource.getResource().getInputStream());
