@@ -5,6 +5,9 @@
  */
 package com.sap.cloud.security.mtls;
 
+import com.sap.cloud.security.config.ClientCertificate;
+import com.sap.cloud.security.config.ClientIdentity;
+import com.sap.cloud.security.config.OAuth2ServiceConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +26,7 @@ import java.util.Base64;
 import java.util.Collection;
 
 import static com.sap.cloud.security.xsuaa.Assertions.assertHasText;
+import static com.sap.cloud.security.xsuaa.Assertions.assertNotNull;
 
 /**
  * Creates a SSLContext (without Bouncy Castle crypto lib).
@@ -46,9 +50,9 @@ public class SSLContextFactory {
 	 * order to support mutual TLS.
 	 *
 	 * @param x509Certificates
-	 *            you can get from your Service Configuration
+	 *            you can get from your Service Configuration {@link OAuth2ServiceConfiguration#getClientIdentity()}
 	 * @param rsaPrivateKey
-	 *            you can get from your Service Configuration
+	 *            you can get from your Service Configuration{@link OAuth2ServiceConfiguration#getClientIdentity()}
 	 * @return a new SSLContext instance
 	 * @throws GeneralSecurityException
 	 *             in case of key parsing errors
@@ -60,19 +64,55 @@ public class SSLContextFactory {
 		assertHasText(x509Certificates, "x509Certificate is required");
 		assertHasText(rsaPrivateKey, "rsaPrivateKey is required");
 
-		SSLContext sslContext = createDefaultSSLContext();
+		return create(new ClientCertificate(x509Certificates, rsaPrivateKey, null));
+	}
 
-		PrivateKey privateKey = getPrivateKeyFromString(rsaPrivateKey);
-		Certificate[] certificateChain = getCertificatesFromString(x509Certificates);
+	/**
+	 * Creates a SSLContext which can be used to parameterize your Rest client, in
+	 * order to support mutual TLS.
+	 *
+	 * @param clientIdentity
+	 *            you can get from your Service Configuration {@link OAuth2ServiceConfiguration#getClientIdentity()}
+	 * @return a new SSLContext instance
+	 * @throws GeneralSecurityException
+	 *             in case of key parsing errors
+	 * @throws IOException
+	 *             in case of KeyStore initialization errors
+	 */
+	public SSLContext create(ClientIdentity clientIdentity) throws GeneralSecurityException, IOException {
+		assertNotNull(clientIdentity, "clientIdentity must not be null");
+		assertHasText(clientIdentity.getCertificate(), "clientIdentity.getCertificate() must not return null");
+		assertHasText(clientIdentity.getKey(), "clientIdentity.getKey() must not return null");
 
-		KeyStore keystore = initializeKeyStore(privateKey, certificateChain);
-
+		KeyStore keystore = createKeyStore(clientIdentity);
 		KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
 		keyManagerFactory.init(keystore, noPassword);
-
+		SSLContext sslContext = createDefaultSSLContext();
 		sslContext.init(keyManagerFactory.getKeyManagers(), null, null);
-
 		return sslContext;
+	}
+
+	/**
+	 * Initializes a KeyStore which can be used to parameterize your Rest client, in
+	 * order to support mutual TLS.
+	 *
+	 * @param clientIdentity
+	 *            you can get from your Service Configuration {@link OAuth2ServiceConfiguration#getClientIdentity()}
+	 * @return a new KeyStore instance
+	 * @throws GeneralSecurityException
+	 *             in case of key parsing errors
+	 * @throws IOException
+	 *             in case of KeyStore initialization errors
+	 */
+	public KeyStore createKeyStore(ClientIdentity clientIdentity) throws GeneralSecurityException, IOException {
+		assertNotNull(clientIdentity, "clientIdentity must not be null");
+		assertHasText(clientIdentity.getCertificate(), "clientIdentity.getCertificate() must not return null");
+		assertHasText(clientIdentity.getKey(), "clientIdentity.getKey() must not return null");
+
+		PrivateKey privateKey = getPrivateKeyFromString(clientIdentity.getKey());
+		Certificate[] certificateChain = getCertificatesFromString(clientIdentity.getCertificate());
+
+		return initializeKeyStore(privateKey, certificateChain);
 	}
 
 	private KeyStore initializeKeyStore(PrivateKey privateKey, Certificate[] certificateChain)
@@ -146,7 +186,6 @@ public class SSLContextFactory {
 					primeExponentQ,
 					crtCoefficient);
 		} catch (IOException e) {
-			logger.error("Exception during parsing DER encoded private key ({})", e.getMessage());
 			throw new GeneralSecurityException("Exception during parsing DER encoded private key", e);
 		}
 		return keySpec;

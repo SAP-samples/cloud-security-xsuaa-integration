@@ -28,13 +28,10 @@ public class DefaultHttpClientFactory implements HttpClientFactory {
 	public CloseableHttpClient createClient(ClientIdentity clientIdentity) throws HttpClientException {
 		LOGGER.warn("In productive environment provide well configured HttpClientFactory service");
 		if (clientIdentity != null && clientIdentity.isCertificateBased()) {
-			LOGGER.debug("Setting up HTTPS client with: certificate: {}\nprivate key: {}\n",
-					clientIdentity.getCertificate(), clientIdentity.getKey());
-
+			LOGGER.debug("Setting up HTTPS client with: certificate: {}\n", clientIdentity.getCertificate());
 			SSLContext sslContext;
 			try {
-				sslContext = SSLContextFactory.getInstance().create(clientIdentity.getCertificate(),
-						clientIdentity.getKey());
+				sslContext = SSLContextFactory.getInstance().create(clientIdentity);
 			} catch (IOException | GeneralSecurityException e) {
 				throw new HttpClientException(
 						String.format("Couldn't set up https client for service provider. %s.",

@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 
+import com.sap.cloud.security.config.ClientCertificate;
+import com.sap.cloud.security.config.ClientCredentials;
 import com.sap.cloud.security.mtls.SSLContextFactory;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -43,6 +45,18 @@ public class SSLContextFactoryTest {
 		assertThatThrownBy(() -> {
 			cut.create(certificates, null);
 		}).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("rsaPrivateKey");
+
+		assertThatThrownBy(() -> {
+			cut.create(null);
+		}).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("clientIdentity");
+
+		assertThatThrownBy(() -> {
+			cut.create(new ClientCredentials("clientId", "clientSecret"));
+		}).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("clientIdentity");
+
+		assertThatThrownBy(() -> {
+			cut.create(new ClientCredentials(null, "clientSecret"));
+		}).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("clientIdentity");
 	}
 
 	@Test
@@ -54,7 +68,23 @@ public class SSLContextFactoryTest {
 		assertThat(cut.create(certificates, rsaPrivateKey), is(notNullValue()));
 	}
 
-	public String readFromFile(String file) throws IOException {
+	@Test
+	public void createKeyStore() throws GeneralSecurityException, IOException {
+		assertThat(cut.createKeyStore(new ClientCertificate(certificates, rsaPrivateKey, null)), is(notNullValue()));
+	}
+
+	@Test
+	public void createKeyStore_throwsOnNullValues() throws GeneralSecurityException, IOException {
+		assertThatThrownBy(() -> {
+			cut.createKeyStore(new ClientCredentials("clientId", "clientSecret"));
+		}).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("clientIdentity");
+
+		assertThatThrownBy(() -> {
+			cut.createKeyStore(new ClientCredentials(null, "clientSecret"));
+		}).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("clientIdentity");
+	}
+
+	private String readFromFile(String file) throws IOException {
 		return IOUtils.resourceToString(file, StandardCharsets.UTF_8);
 	}
 
