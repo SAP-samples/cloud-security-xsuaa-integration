@@ -1,0 +1,173 @@
+---
+###  SERVICE INSTANCE CONFIGURATION  ###
+# Xsuaa instance
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: xsuaa-basic
+  namespace: dev
+spec:
+  clusterServiceClassExternalName: xsuaa
+  clusterServicePlanExternalName: application
+  parameters:
+    xsappname: spring-security-basic-auth
+    tenant-mode: dedicated
+    scopes:
+      - name: "$XSAPPNAME.Display"
+        description: With this scope, information can be read
+    role-templates:
+      - name: AccessRole
+        description: Role to call the spring-security-basic-auth service
+        scope-references:
+          - "$XSAPPNAME.Display"
+    role-collections:
+      - name: BASIC_AUTH_API_Viewer
+        description: Viewer (read)
+        role-template-references:
+          - "$XSAPPNAME.AccessRole"
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: xsuaa-basic-binding
+  namespace: <YOUR NAMESPACE>
+spec:
+  instanceRef:
+    name: xsuaa-basic
+---
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: xsuaa-basic-binding-usage
+  namespace: <YOUR NAMESPACE>
+spec:
+  parameters:
+    envPrefix:
+      name: xsuaa_
+  serviceBindingRef:
+    name: xsuaa-basic-binding
+  usedBy:
+    kind: deployment
+    name: spring-security-basic-auth
+---
+# Service manager instance
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: service-manager
+  namespace: <YOUR NAMESPACE>
+spec:
+  clusterServiceClassExternalName: service-manager
+  clusterServicePlanExternalName: subaccount-admin
+  parameters:
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: service-manager-binding
+  namespace: <YOUR NAMESPACE>
+spec:
+  instanceRef:
+    name: service-manager
+---
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: service-manager-binding-usage
+  namespace: <YOUR NAMESPACE>
+spec:
+  parameters:
+    envPrefix:
+      name: sm_
+  serviceBindingRef:
+    name: service-manager-binding
+  usedBy:
+    kind: deployment
+    name: spring-security-basic-auth
+---
+###  APPLICATION CONFIGURATION  ###
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: spring-security-basic-auth
+    kyma-grafana: enabled
+  name: spring-security-basic-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-security-basic-auth
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: spring-security-basic-auth
+        kyma-grafana: enabled
+    spec:
+      containers:
+        - image: <placeholder for image repository>
+          imagePullPolicy: Always
+          name: spring-security-basic-auth
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: xsuaa
+              mountPath: "/etc/secrets/sapcp/xsuaa/xsuaa-basic"
+              readOnly: true
+            - name: service-manager
+              mountPath: "/etc/secrets/sapcp/service-manager/sm"
+              readOnly: true
+
+      volumes:
+        - name: xsuaa
+          secret:
+              secretName: xsuaa-basic-binding
+        - name: service-manager
+          secret:
+              secretName: service-manager-binding
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: spring-security-basic-auth
+  name: spring-security-basic-auth
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: spring-security-basic-auth
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: spring-security-basic-auth-api
+  namespace: <YOUR NAMESPACE>
+  labels:
+    app: spring-security-basic-auth
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+    - accessStrategies:
+        - config: {}
+          handler: allow
+      methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - HEAD
+      path: /.*
+  service:
+    host: spring-security-basic-auth-api
+    name: spring-security-basic-auth
+    port: 80

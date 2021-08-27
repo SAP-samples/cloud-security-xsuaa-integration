@@ -10,6 +10,71 @@ This is done by means of the class `BasicAuthenticationEntryPoint` in the Securi
 # Coding
 This sample is using the spring-security project. As of version 5 of spring-security, this includes the OAuth resource-server functionality. It enables caching using [`Caffeine`](https://github.com/ben-manes/caffeine) to avoid requesting new tokens from XSUAA for every incoming request.
 
+Follow the deployment steps for [Kyma/Kubernetes](#Deployment-on-Kyma/Kubernetes) or [Cloud Foundry](#Deployment-on-Cloud-Foundry).
+
+ 
+# Deployment on Kyma/Kubernetes
+<details>
+<summary>Collapse this to follow the deployment steps</summary>
+  
+- Build docker image and push to repository
+- Configure the deployment.yml
+- Deploy the application
+- Assign Role Collection to your user
+- Access the application
+
+## Build docker image and push to repository
+```shell script
+mvn spring-boot:build-image -Dspring-boot.build-image.imageName=<repositoryName>/<imageName>
+docker push <repositoryName>/<imageName>
+```
+
+## Configure the deployment.yml
+Replace the placeholders for image repository in deployment.yml with the one created in the previous step.
+
+## Deploy the application
+Deploy the application using [kubectl cli](https://kubernetes.io/docs/reference/kubectl/)
+```shell script
+kubectl apply -f ./k8s/deployment.yml -n <YOUR NAMESPACE>
+```
+
+## Cockpit administration tasks: Assign Role Collection to your user
+Finally, as part of your Identity Provider, e.g. SAP ID Service, assign the deployed Role Collection `JAVA_SECURITY_SAMPLE_Viewer` to your user as depicted in the screenshot below and as documented [here](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/9e1bf57130ef466e8017eab298b40e5e.html).
+
+![](../images/SAP_CP_Cockpit_AssignRoleCollectionToUser.png)
+
+Further up-to-date information you can get on sap.help.com:
+- [Maintain Role Collections](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/d5f1612d8230448bb6c02a7d9c8ac0d1.html)
+- [Maintain Roles for Applications](https://help.sap.com/viewer/65de2977205c403bbc107264b8eccf4b/Cloud/en-US/7596a0bdab4649ac8a6f6721dc72db19.html).
+
+## Access the application
+After deployment, the spring service can be called with basic authentication.
+```shell
+curl -i --user "<SAP ID Service User>:<SAP ID Service Password>" https://spring-security-basic-auth-api.<K8s DOMAIN>/hello-token
+```
+
+You will get a response like:
+```
+{
+  "client id": "sb-spring-security-xsuaa-usage!t291",
+  "family name": "Jones",
+  "given name": "Bob",
+  "subaccount id": "2f047cc0-4364-4d8b-ae70-b8bd39d15bf0",
+  "logon name": "bob.jones@example.com",
+  "email": "bob.jones@example.com",
+  "grant type": "password",
+  "authorities": "[openid, spring-security-basic-auth!t19435.Display]",
+  "scopes": "[openid, spring-security-basic-auth!t19435.Display]"
+}
+```
+
+## Cleanup
+Finally, delete your application and your service instances using the following commands:
+```shell script
+ kubectl delete -f ./k8s/deployment.yml
+```
+</details>
+
 # Deployment on Cloud Foundry
 To deploy the application, the following steps are required:
 - Compile the Java application
