@@ -19,7 +19,7 @@ import java.util.Collection;
 import static com.sap.cloud.security.config.Service.XSUAA;
 import static org.junit.jupiter.api.Assertions.*;
 
-class XsuaaTokenAuthenticationConverterTest {
+class XsuaaTokenAuthorizationConverterTest {
 	String xsAppName = "my-app-name!400";
 	JwtGenerator jwtGenerator = JwtGenerator.getInstance(XSUAA, "theClientId").withAppId(xsAppName);
 	XsuaaTokenAuthorizationConverter cut = new XsuaaTokenAuthorizationConverter(xsAppName);

@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.sap.cloud.security.xsuaa.extractor.LocalAuthoritiesExtractor;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -106,6 +107,20 @@ public class TokenAuthenticationConverterTest {
 		assertThat(authenticationToken.getAuthorities(), hasItem(new SimpleGrantedAuthority("Read")));
 	}
 
+	@Test
+	public void checkFollowingInstanceScope() {
+		String scopeWithClientId =  "7cf2e319-3a7d-4f99-8207-afdc8e8e6d64!b123|trustedclientid!b333.API_OVERVIEW";
+
+		Jwt jwt = new JwtGenerator("sb-7cf2e319-3a7d-4f99-8207-afdc8e8e6d64!b123|trustedclientid!b333")
+				.addScopes(xsAppName + "." + scopeAdmin, scopeRead, scopeWithClientId)
+				.getToken();
+		TokenAuthenticationConverter converter = new TokenAuthenticationConverter(new MyFollowingInstanceAuthoritiesExtractor());
+
+		assertThat(converter.convert(jwt).getAuthorities().size(), is(1));
+		assertThat(converter.convert(jwt).getAuthorities(), hasItem(new SimpleGrantedAuthority("API_OVERVIEW")));
+
+	}
+
 	private static class MyAuthoritiesExtractor implements AuthoritiesExtractor {
 		private String[] xsUserAttributes;
 		private AuthoritiesExtractor authoritiesExtractor;
@@ -138,6 +153,20 @@ public class TokenAuthenticationConverterTest {
 
 		private static String getSidForAttributeValue(String attributeName, String attributeValue) {
 			return "ATTR:" + attributeName.toUpperCase() + "=" + attributeValue;
+		}
+
+	}
+
+	private static class MyFollowingInstanceAuthoritiesExtractor implements AuthoritiesExtractor {
+
+		@Override
+		public Collection<GrantedAuthority> getAuthorities(XsuaaToken token) {
+			String appId = "";
+			if(token.getClientId().startsWith("sb-")) {
+				appId = token.getClientId().replaceFirst("sb-", "");
+			}
+			AuthoritiesExtractor authoritiesExtractor = new LocalAuthoritiesExtractor(appId);
+			return authoritiesExtractor.getAuthorities(token);
 		}
 
 	}

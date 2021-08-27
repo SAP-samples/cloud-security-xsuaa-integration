@@ -43,7 +43,7 @@ public class LocalAuthoritiesExtractor implements AuthoritiesExtractor {
 		}
 		return scopes.stream()
 				.filter(scope -> scope.startsWith(appId + "."))
-				.map(scope -> scope.replaceFirst(appId + ".", ""))
+				.map(scope -> scope.substring(appId.length() + 1))
 				.collect(Collectors.toSet());
 	}
 
