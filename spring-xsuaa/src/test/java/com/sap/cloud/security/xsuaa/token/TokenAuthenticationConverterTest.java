@@ -9,8 +9,8 @@ import com.sap.cloud.security.xsuaa.extractor.AuthoritiesExtractor;
 import com.sap.cloud.security.xsuaa.extractor.DefaultAuthoritiesExtractor;
 import com.sap.cloud.security.xsuaa.extractor.LocalAuthoritiesExtractor;
 import com.sap.cloud.security.xsuaa.test.JwtGenerator;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TokenAuthenticationConverterTest {
 	private String xsAppName = "my-app-name!400";
@@ -31,7 +31,7 @@ public class TokenAuthenticationConverterTest {
 	String scopeRead = xsAppName + "." + "Read";
 	String scopeOther = "other-app!234" + "." + "Other";
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		tokenConverterDefault = new TokenAuthenticationConverter(xsAppName);
 

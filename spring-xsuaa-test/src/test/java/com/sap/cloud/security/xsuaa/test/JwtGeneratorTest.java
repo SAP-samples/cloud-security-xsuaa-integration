@@ -9,8 +9,8 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.sap.cloud.security.xsuaa.test.JwtGenerator.TokenClaims;
 import com.sap.cloud.security.xsuaa.test.JwtGenerator.TokenHeaders;
 import org.json.JSONArray;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.io.IOException;
@@ -21,6 +21,7 @@ import java.util.Map;
 import static com.sap.cloud.security.xsuaa.test.TestConstants.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.text.IsEmptyString.isEmptyString;
 
 public class JwtGeneratorTest {
 	private JwtGenerator jwtGenerator;
@@ -28,7 +29,7 @@ public class JwtGeneratorTest {
 	private static final String MY_USER_NAME = "UserName";
 	private static final String MY_SUBDOMAIN = "my-subaccount-subdomain";
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		jwtGenerator = new JwtGenerator(MY_CLIENT_ID, MY_SUBDOMAIN);
 	}
@@ -39,7 +40,7 @@ public class JwtGeneratorTest {
 		assertThat(jwt.getClaimAsString("zid"), equalTo(JwtGenerator.DEFAULT_IDENTITY_ZONE_ID));
 		assertThat(jwt.getExpiresAt(), not(equals(nullValue())));
 		assertThat(jwt.getAudience(), is(nullValue()));
-		assertThat(getExternalAttributeFromClaim(jwt, "zdn"), is(emptyString()));
+		assertThat(getExternalAttributeFromClaim(jwt, "zdn"), isEmptyString());
 		assertThat(getExternalAttributeFromClaim(jwt, "enhancer"), equalTo("XSUAA"));
 	}
 

@@ -8,8 +8,8 @@ package com.sap.cloud.security.mtls;
 import com.sap.cloud.security.config.ClientCertificate;
 import com.sap.cloud.security.config.ClientCredentials;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -28,7 +28,7 @@ public class SSLContextFactoryTest {
 	String certificates;
 	String eccCertificate;
 
-	@Before
+	@BeforeEach
 	public void setup() throws IOException {
 		cut = SSLContextFactory.getInstance();
 

@@ -20,9 +20,9 @@ import com.sap.cloud.security.xsuaa.client.OAuth2TokenKeyService;
 import com.sap.cloud.security.xsuaa.client.OidcConfigurationService;
 import com.sap.cloud.security.xsuaa.http.HttpHeaders;
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
@@ -36,7 +36,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -52,7 +52,7 @@ public class SapIdJwtSignatureValidatorTest {
 	private OidcConfigurationService oidcConfigServiceMock;
 	private OAuth2ServiceEndpointsProvider endpointsProviderMock;
 
-	@Before
+	@BeforeEach
 	public void setup() throws IOException {
 		// no zone-id but iss host == jwks host
 		iasPaasToken = new SapIdToken(
@@ -81,7 +81,7 @@ public class SapIdJwtSignatureValidatorTest {
 						.withOidcConfigurationService(oidcConfigServiceMock));
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		SecurityContext.clear();
 	}

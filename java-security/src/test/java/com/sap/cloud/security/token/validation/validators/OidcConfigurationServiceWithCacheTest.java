@@ -9,8 +9,8 @@ import com.sap.cloud.security.xsuaa.client.OAuth2ServiceEndpointsProvider;
 import com.sap.cloud.security.xsuaa.client.OAuth2ServiceException;
 import com.sap.cloud.security.xsuaa.client.OidcConfigurationService;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class OidcConfigurationServiceWithCacheTest {
 	OAuth2ServiceEndpointsProvider oidcEndpointsProviderMock;
 	URI DISCOVERY_URI = URI.create("https://myauth.com/.well-known/oidc-config");
 
-	@Before
+	@BeforeEach
 	public void setup() throws IOException {
 		oidcEndpointsProviderMock = Mockito.mock(OAuth2ServiceEndpointsProvider.class);
 		oidcConfigServiceMock = Mockito.mock(OidcConfigurationService.class);
@@ -95,9 +95,8 @@ public class OidcConfigurationServiceWithCacheTest {
 		when(oidcConfigServiceMock.retrieveEndpoints(any()))
 				.thenThrow(new OAuth2ServiceException("Currently unavailable"));
 
-		assertThatThrownBy(() -> {
-			cut.getOrRetrieveEndpoints(DISCOVERY_URI);
-		}).isInstanceOf(OAuth2ServiceException.class).hasMessageStartingWith("Currently unavailable");
+		assertThatThrownBy(() ->
+			cut.getOrRetrieveEndpoints(DISCOVERY_URI)).isInstanceOf(OAuth2ServiceException.class).hasMessageStartingWith("Currently unavailable");
 	}
 
 	@Test

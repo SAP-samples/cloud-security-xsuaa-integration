@@ -6,8 +6,8 @@
 package com.sap.cloud.security.xsuaa.client;
 
 import com.sap.cloud.security.config.OAuth2ServiceConfiguration;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.net.URI;
@@ -16,6 +16,7 @@ import static com.sap.cloud.security.config.CredentialType.INSTANCE_SECRET;
 import static com.sap.cloud.security.config.CredentialType.X509;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class XsuaaDefaultEndpointsTest {
 
@@ -24,7 +25,7 @@ public class XsuaaDefaultEndpointsTest {
 	private static final String CERT_URL = "https://subdomain.cert.myauth.com";
 	private OAuth2ServiceEndpointsProvider cut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		oAuth2ServiceConfiguration = Mockito.mock(OAuth2ServiceConfiguration.class);
 	}
@@ -61,20 +62,24 @@ public class XsuaaDefaultEndpointsTest {
 		assertThat(cut.getTokenEndpoint().toString(), is(CERT_URL + "/oauth/token"));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void getEndpoint_throwsException_whenBaseUriIsNull() {
-		new XsuaaDefaultEndpoints(null, CERT_URL);
+		assertThrows(IllegalArgumentException.class, () -> {
+			new XsuaaDefaultEndpoints(null, CERT_URL);
+		});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void getJwksUri_throwsException_whenBaseUriIsNull() {
-		Mockito.when(oAuth2ServiceConfiguration.getCertUrl()).thenReturn(URI.create(CERT_URL));
-		Mockito.when(oAuth2ServiceConfiguration.getCredentialType()).thenReturn(X509);
+		assertThrows(IllegalArgumentException.class, () -> {
+			Mockito.when(oAuth2ServiceConfiguration.getCertUrl()).thenReturn(URI.create(CERT_URL));
+			Mockito.when(oAuth2ServiceConfiguration.getCredentialType()).thenReturn(X509);
 
-		cut = new XsuaaDefaultEndpoints(oAuth2ServiceConfiguration);
+			cut = new XsuaaDefaultEndpoints(oAuth2ServiceConfiguration);
 
-		assertThat(cut.getTokenEndpoint().toString(), is(CERT_URL + "/oauth/token")); // ok
-		cut.getJwksUri(); // raise exception
+			assertThat(cut.getTokenEndpoint().toString(), is(CERT_URL + "/oauth/token")); // ok
+			cut.getJwksUri(); // raise exception
+		}); // raise exception
 	}
 
 	@Test

@@ -15,8 +15,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicHeader;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import org.springframework.http.HttpMethod;
@@ -31,7 +31,7 @@ import java.util.Map;
 import static com.sap.cloud.security.xsuaa.http.HttpHeaders.X_OSB_PLAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
@@ -56,7 +56,7 @@ public class DefaultOAuth2TokenKeyServiceTest {
 		jsonWebKeysAsString = IOUtils.resourceToString("/jsonWebTokenKeys.json", StandardCharsets.UTF_8);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		httpClient = Mockito.mock(CloseableHttpClient.class);
 		cut = new DefaultOAuth2TokenKeyService(httpClient);

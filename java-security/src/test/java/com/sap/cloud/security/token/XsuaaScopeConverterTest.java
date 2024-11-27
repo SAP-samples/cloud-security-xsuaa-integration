@@ -5,8 +5,8 @@
  */
 package com.sap.cloud.security.token;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
@@ -19,7 +19,7 @@ public class XsuaaScopeConverterTest {
 	private XsuaaScopeConverter cut;
 	private String appId = "myAppId!t1785";
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		cut = new XsuaaScopeConverter(appId);
 	}

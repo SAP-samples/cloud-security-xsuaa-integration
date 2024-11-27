@@ -12,8 +12,8 @@ import com.sap.cloud.security.config.ClientIdentity;
 import com.sap.cloud.security.xsuaa.http.HttpHeaders;
 import com.sap.cloud.security.xsuaa.tokenflows.TokenCacheConfiguration;
 import org.assertj.core.util.Maps;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.time.Clock;
@@ -38,7 +38,7 @@ public class AbstractOAuth2TokenServiceTest {
 
 	private TestOAuth2TokenService cut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		cut = new TestOAuth2TokenService(TEST_CACHE_CONFIGURATION);
 	}

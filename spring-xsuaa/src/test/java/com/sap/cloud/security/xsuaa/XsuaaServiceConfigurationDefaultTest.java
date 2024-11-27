@@ -1,12 +1,12 @@
 package com.sap.cloud.security.xsuaa;
 
 import com.sap.cloud.security.config.CredentialType;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.net.URI;
 
@@ -14,7 +14,7 @@ import static com.sap.cloud.security.xsuaa.XsuaaServiceConfigurationDefault.VCAP
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = { "xsuaa.clientid=client", "xsuaa.certificate=cert", "xsuaa.key=key",
 		"xsuaa.certurl=https://my.cert.authentication.sap.com", "xsuaa.credential-type=x509" })
 @ContextConfiguration(classes = { XsuaaServiceConfigurationDefault.class })

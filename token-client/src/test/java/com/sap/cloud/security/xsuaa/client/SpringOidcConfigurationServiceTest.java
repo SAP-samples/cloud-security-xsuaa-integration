@@ -6,8 +6,8 @@
 package com.sap.cloud.security.xsuaa.client;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -37,7 +37,7 @@ public class SpringOidcConfigurationServiceTest {
 		jsonOidcConfiguration = IOUtils.resourceToString("/oidcConfiguration.json", StandardCharsets.UTF_8);
 	}
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		restOperationsMock = mock(RestOperations.class);
 		cut = new SpringOidcConfigurationService(restOperationsMock);

@@ -9,13 +9,13 @@ import com.sap.cloud.security.config.ClientCredentials;
 import com.sap.cloud.security.config.ClientIdentity;
 import com.sap.cloud.security.config.OAuth2ServiceConfiguration;
 import com.sap.cloud.security.xsuaa.client.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,10 +27,9 @@ import static com.sap.cloud.security.xsuaa.tokenflows.TestConstants.XSUAA_BASE_U
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ClientCredentialsTokenFlowTest {
 
 	@Mock
@@ -42,7 +41,7 @@ public class ClientCredentialsTokenFlowTest {
 
 	private static final String JWT_ACCESS_TOKEN = "4bfad399ca10490da95c2b5eb4451d53";
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		OAuth2ServiceConfiguration oAuth2ServiceConfiguration = Mockito.mock(OAuth2ServiceConfiguration.class);
 		Mockito.when(oAuth2ServiceConfiguration.getUrl()).thenReturn(XSUAA_BASE_URI);
@@ -87,9 +86,8 @@ public class ClientCredentialsTokenFlowTest {
 						isNull(), isNull(), anyMap(), anyBoolean()))
 				.thenThrow(new OAuth2ServiceException("exception executed REST call"));
 
-		assertThatThrownBy(() -> {
-			cut.execute();
-		}).isInstanceOf(TokenFlowException.class)
+		assertThatThrownBy(() ->
+			cut.execute()).isInstanceOf(TokenFlowException.class)
 				.hasMessageContaining(
 						"Error requesting technical user token with grant_type 'client_credentials': exception executed REST call");
 	}

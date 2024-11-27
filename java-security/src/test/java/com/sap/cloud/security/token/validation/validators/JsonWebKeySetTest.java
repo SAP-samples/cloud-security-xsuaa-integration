@@ -5,9 +5,9 @@
  */
 package com.sap.cloud.security.token.validation.validators;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import static com.sap.cloud.security.token.validation.validators.JsonWebKey.DEFAULT_KEY_ID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +18,7 @@ public class JsonWebKeySetTest {
 
 	private JsonWebKeySet cut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		cut = new JsonWebKeySet();
 	}
@@ -37,7 +37,7 @@ public class JsonWebKeySetTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getKeyByAlgorithmAndId_returnsNull_whenKeyTypeDoesNotMatch() {
 		JwtSignatureAlgorithm differentKeyAlgorithm = JwtSignatureAlgorithm.RS256; // ES256
 

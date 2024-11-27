@@ -75,7 +75,7 @@
                 <!--  Run with mvn failsafe:integration-test -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M4</version>
+                <version>${maven-failsafe-plugin.version}}</version>
                 <configuration>
                     <includes>
                         <include>**/*.java</include>

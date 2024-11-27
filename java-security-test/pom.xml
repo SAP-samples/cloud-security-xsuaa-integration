@@ -22,10 +22,6 @@
             <groupId>com.sap.cloud.security</groupId>
             <artifactId>java-security</artifactId>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -59,6 +55,12 @@
 			<artifactId>spotbugs-annotations</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<!--scope provided as we want to get rid of JUnit4 by still allowing to use the existing SecurityTestRule-->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- test dependencies -->
 		<dependency>
@@ -76,6 +78,11 @@
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
         </dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest</artifactId>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 
 	<build>

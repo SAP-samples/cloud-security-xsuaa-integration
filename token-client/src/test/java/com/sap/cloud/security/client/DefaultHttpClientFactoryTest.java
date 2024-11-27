@@ -5,7 +5,9 @@
  */
 package com.sap.cloud.security.client;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.sap.cloud.security.config.ClientCredentials;
 import com.sap.cloud.security.config.ClientIdentity;
 import org.apache.commons.io.IOUtils;
@@ -25,6 +27,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+@WireMockTest
 class DefaultHttpClientFactoryTest {
 
 	private static final ResponseHandler<Integer> STATUS_CODE_EXTRACTOR = response -> response.getStatusLine()
@@ -51,24 +54,23 @@ class DefaultHttpClientFactoryTest {
 	}
 
 	@Test
-	void disableRedirects() throws IOException {
-		WireMockServer wireMockServer = new WireMockServer(8000);
-		wireMockServer.stubFor(get(urlEqualTo("/redirect"))
+	void disableRedirects(WireMockRuntimeInfo wmRuntimeInfo) throws IOException {
+
+		WireMock wireMock = wmRuntimeInfo.getWireMock();
+		wireMock.register(get(urlEqualTo("/redirect"))
 				.willReturn(aResponse().withHeader(HttpHeaders.LOCATION, "https://sap.com")
 						.withStatus(HttpStatus.SC_MOVED_PERMANENTLY)));
-		wireMockServer.start();
-		try {
-			CloseableHttpClient client = cut.createClient(config);
 
-			int statusCode = client.execute(new HttpGet("http://localhost:8000/redirect"), STATUS_CODE_EXTRACTOR);
-			assertEquals(HttpStatus.SC_MOVED_PERMANENTLY, statusCode);
+		int port = wmRuntimeInfo.getHttpPort();
 
-			CloseableHttpClient client2 = cut.createClient(new ClientCredentials("client", "secret"));
-			statusCode = client2.execute(new HttpGet("http://localhost:8000/redirect"), STATUS_CODE_EXTRACTOR);
-			assertEquals(HttpStatus.SC_MOVED_PERMANENTLY, statusCode);
-		} finally {
-			wireMockServer.stop();
-		}
+		CloseableHttpClient client = cut.createClient(config);
+
+		int statusCode = client.execute(new HttpGet("http://localhost:"+port+"/redirect"), STATUS_CODE_EXTRACTOR);
+		assertEquals(HttpStatus.SC_MOVED_PERMANENTLY, statusCode);
+
+		CloseableHttpClient client2 = cut.createClient(new ClientCredentials("client", "secret"));
+		statusCode = client2.execute(new HttpGet("http://localhost:"+port+"/redirect"), STATUS_CODE_EXTRACTOR);
+		assertEquals(HttpStatus.SC_MOVED_PERMANENTLY, statusCode);
 	}
 
 }

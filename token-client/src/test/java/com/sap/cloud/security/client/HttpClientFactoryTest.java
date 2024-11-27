@@ -7,9 +7,9 @@ package com.sap.cloud.security.client;
 
 import com.sap.cloud.security.config.ClientCredentials;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HttpClientFactoryTest {
 

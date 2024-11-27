@@ -5,8 +5,8 @@
  */
 package com.sap.cloud.security.config;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.util.Collections;
@@ -19,7 +19,7 @@ public class OAuth2ServiceConfigurationBuilderTest {
 
 	private OAuth2ServiceConfigurationBuilder cut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		cut = OAuth2ServiceConfigurationBuilder.forService(Service.XSUAA);
 	}

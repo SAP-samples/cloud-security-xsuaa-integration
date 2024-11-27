@@ -15,8 +15,8 @@ import com.sap.cloud.security.xsuaa.client.OAuth2TokenKeyService;
 import com.sap.cloud.security.xsuaa.client.OidcConfigurationService;
 import com.sap.cloud.security.xsuaa.http.HttpHeaders;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class XsuaaJwtSignatureValidatorTest {
 	private OAuth2TokenKeyService tokenKeyServiceMock;
 	private OAuth2ServiceConfiguration mockConfiguration;
 
-	@Before
+	@BeforeEach
 	public void setup() throws IOException {
 		/**
 		 * Header -------- { "alg": "RS256", "jku":

@@ -6,14 +6,14 @@
 package com.sap.cloud.security.xsuaa.client;
 
 import org.hamcrest.number.OrderingComparison;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OAuth2TokenResponseTest {
 

@@ -5,9 +5,9 @@
  */
 package com.sap.cloud.security.json;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -31,7 +31,7 @@ public class DefaultJsonObjectTest {
 
 	private DefaultJsonObject cut;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		cut = createJsonParser(KEY_1, STRING_VALUE);
 	}
@@ -227,7 +227,7 @@ public class DefaultJsonObjectTest {
 		try {
 			new DefaultJsonObject(deeplyNestedJsonObject);
 		} catch (StackOverflowError e) {
-			Assert.fail("Encountered StackoverflowError.");
+			Assertions.fail("Encountered StackoverflowError.");
 		} catch (Exception ignored) {
 		}
 	}

@@ -8,8 +8,8 @@ package com.sap.cloud.security.xsuaa.token;
 import com.sap.cloud.security.xsuaa.extractor.DefaultAuthoritiesExtractor;
 import com.sap.cloud.security.xsuaa.test.JwtGenerator;
 import com.sap.cloud.security.xsuaa.token.authentication.XsuaaJwtDecoder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -19,7 +19,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 public class SpringSecurityContextTest {
@@ -31,20 +32,22 @@ public class SpringSecurityContextTest {
 	private static final String SUBDOMAIN_2 = "subdomain-2";
 	private static final String CLIENT_ID = "sb-xsappname!t123";
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		token_1 = new JwtGenerator(CLIENT_ID, SUBDOMAIN_1).getToken();
 		token_2 = new JwtGenerator(CLIENT_ID, SUBDOMAIN_2).getToken();
 	}
 
-	@Test(expected = AccessDeniedException.class) // Access forbidden: not authenticated
+	@Test // Access forbidden: not authenticated
 	public void getSecurityContextRaiseAccessDeniedExceptionIfNotInitialized() {
-		SpringSecurityContext.getToken();
+		assertThrows(AccessDeniedException.class, () ->
+			SpringSecurityContext.getToken());
 	}
 
-	@Test(expected = IllegalArgumentException.class) // Passed JwtDecoder instance must be of type 'XsuaaJwtDecoder'
+	@Test // Passed JwtDecoder instance must be of type 'XsuaaJwtDecoder'
 	public void initSecurityContextRaiseExceptionIfNotXsuaaJwtDecoder() {
-		SpringSecurityContext.init(token_1.getTokenValue(), s -> token_1, new DefaultAuthoritiesExtractor());
+		assertThrows(IllegalArgumentException.class, () ->
+			SpringSecurityContext.init(token_1.getTokenValue(), s -> token_1, new DefaultAuthoritiesExtractor()));
 	}
 
 	/**

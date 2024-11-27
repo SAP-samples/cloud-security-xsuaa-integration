@@ -6,7 +6,7 @@
 package com.sap.cloud.security.test;
 
 import com.sap.cloud.security.config.Service;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

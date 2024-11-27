@@ -6,8 +6,8 @@
 package com.sap.cloud.security.token.validation.validators;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -22,7 +22,7 @@ public class JsonWebKeySetFactoryTest {
 
 	private String jsonWebTokenKeys;
 
-	@Before
+	@BeforeEach
 	public void setup() throws IOException {
 		jsonWebTokenKeys = IOUtils.resourceToString("/jsonWebTokenKeys.json", StandardCharsets.UTF_8);
 	}

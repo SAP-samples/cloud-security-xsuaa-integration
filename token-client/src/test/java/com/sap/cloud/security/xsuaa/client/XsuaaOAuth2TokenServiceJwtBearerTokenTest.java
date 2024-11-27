@@ -7,13 +7,15 @@ package com.sap.cloud.security.xsuaa.client;
 
 import com.sap.cloud.security.config.ClientCredentials;
 import com.sap.cloud.security.config.ClientIdentity;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.http.*;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
@@ -28,11 +30,13 @@ import static com.sap.cloud.security.xsuaa.client.OAuth2TokenServiceConstants.*;
 import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class XsuaaOAuth2TokenServiceJwtBearerTokenTest {
 
 	private OAuth2TokenService cut;
@@ -47,7 +51,7 @@ public class XsuaaOAuth2TokenServiceJwtBearerTokenTest {
 	@Mock
 	private RestOperations mockRestOperations;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		response = new HashMap<>();
 		response.putIfAbsent(ACCESS_TOKEN, "f529.dd6e30.d454677322aaabb0");
@@ -59,20 +63,24 @@ public class XsuaaOAuth2TokenServiceJwtBearerTokenTest {
 		cut = new XsuaaOAuth2TokenService(mockRestOperations);
 	}
 
-	@Test(expected = OAuth2ServiceException.class)
-	public void retrieveToken_httpStatusUnauthorized_throwsException() throws OAuth2ServiceException {
-		throwExceptionOnPost(HttpStatus.UNAUTHORIZED);
+	@Test
+	public void retrieveToken_httpStatusUnauthorized_throwsException() {
+		assertThrows(OAuth2ServiceException.class, () -> {
+			throwExceptionOnPost(HttpStatus.UNAUTHORIZED);
 
-		cut.retrieveAccessTokenViaJwtBearerTokenGrant(tokenEndpoint, clientIdentity,
-				jwtToken, null, null, false);
+			cut.retrieveAccessTokenViaJwtBearerTokenGrant(tokenEndpoint, clientIdentity,
+					jwtToken, null, null, false);
+		});
 	}
 
-	@Test(expected = OAuth2ServiceException.class)
-	public void retrieveToken_httpStatusNotOk_throwsException() throws OAuth2ServiceException {
-		throwExceptionOnPost(HttpStatus.BAD_REQUEST);
+	@Test
+	public void retrieveToken_httpStatusNotOk_throwsException() {
+		assertThrows(OAuth2ServiceException.class, () -> {
+			throwExceptionOnPost(HttpStatus.BAD_REQUEST);
 
-		cut.retrieveAccessTokenViaJwtBearerTokenGrant(tokenEndpoint, clientIdentity,
-				jwtToken, null, null, false);
+			cut.retrieveAccessTokenViaJwtBearerTokenGrant(tokenEndpoint, clientIdentity,
+					jwtToken, null, null, false);
+		});
 	}
 
 	@Test

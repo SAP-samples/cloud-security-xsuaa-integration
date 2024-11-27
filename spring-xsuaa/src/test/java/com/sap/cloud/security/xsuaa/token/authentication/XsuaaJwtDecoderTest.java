@@ -11,9 +11,9 @@ import com.sap.cloud.security.xsuaa.XsuaaServiceConfigurationCustom;
 import com.sap.cloud.security.xsuaa.XsuaaServiceConfigurationDefault;
 import com.sap.cloud.security.xsuaa.token.TokenClaims;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestOperations;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @TestPropertySource("/XsuaaJwtDecoderTest.properties")
 @ContextConfiguration(classes = XsuaaServiceConfigurationDefault.class)
 public class XsuaaJwtDecoderTest {
@@ -47,7 +47,7 @@ public class XsuaaJwtDecoderTest {
 	private String ccToken;
 	private String jwks;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws IOException {
 		rsaToken = IOUtils.resourceToString("/accessTokenRSA256WithVerificationKey.txt", StandardCharsets.UTF_8);
 		ccToken = IOUtils.resourceToString("/token_cc.txt", StandardCharsets.UTF_8);

@@ -6,8 +6,8 @@
 package com.sap.cloud.security.xsuaa.token;
 
 import com.sap.cloud.security.xsuaa.test.JwtGenerator;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -30,7 +30,7 @@ public class ReactiveSecurityContextTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void authenticated() {
 		XsuaaToken jwt = new XsuaaToken(new JwtGenerator().setUserName("user").getToken());
 		SecurityContext expectedContext = new SecurityContextImpl(

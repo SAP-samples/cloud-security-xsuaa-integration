@@ -17,12 +17,12 @@ import com.sap.cloud.security.xsuaa.client.OAuth2ServiceEndpointsProvider;
 import com.sap.cloud.security.xsuaa.client.OAuth2TokenKeyService;
 import com.sap.cloud.security.xsuaa.client.OidcConfigurationService;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.net.URI;
@@ -38,7 +38,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class JwtValidatorBuilderTest {
 
 	OAuth2ServiceConfigurationBuilder xsuaaConfigBuilder = OAuth2ServiceConfigurationBuilder.forService(XSUAA)
@@ -46,7 +46,7 @@ public class JwtValidatorBuilderTest {
 			.withProperty(ServiceConstants.XSUAA.APP_ID, "test-app!t123")
 			.withClientId("sb-test-app!t123");
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		Mockito.mockitoSession().initMocks();
 	}
@@ -181,7 +181,7 @@ public class JwtValidatorBuilderTest {
 				return;
 			}
 		}
-		Assert.fail("No JwtAudienceValidator found that contains all clientIds!"); // should never be called
+		Assertions.fail("No JwtAudienceValidator found that contains all clientIds!"); // should never be called
 	}
 
 }

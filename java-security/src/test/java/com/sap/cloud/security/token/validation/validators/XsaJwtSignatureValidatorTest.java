@@ -12,8 +12,8 @@ import com.sap.cloud.security.token.XsuaaToken;
 import com.sap.cloud.security.xsuaa.client.OAuth2TokenKeyService;
 import com.sap.cloud.security.xsuaa.client.OidcConfigurationService;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class XsaJwtSignatureValidatorTest {
 	private static final URI PROVIDER_URI = URI.create("https://myauth.com");
 	private static final URI JKU_URI = URI.create("https://myauth.com/token_keys");
 
-	@Before
+	@BeforeEach
 	public void setup() throws IOException {
 		/**
 		 * Header -------- { "alg": "RS256", } Payload -------- { "iss":

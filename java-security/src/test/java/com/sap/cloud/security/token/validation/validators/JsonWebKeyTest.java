@@ -5,8 +5,8 @@
  */
 package com.sap.cloud.security.token.validation.validators;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class JsonWebKeyTest {
 	private JsonWebKey cut;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		cut = JsonWebKeyTestFactory.create();
 	}

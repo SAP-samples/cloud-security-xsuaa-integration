@@ -8,8 +8,8 @@ package com.sap.cloud.security.token.validation.validators;
 import com.sap.cloud.security.token.MockTokenBuilder;
 import com.sap.cloud.security.token.Token;
 import com.sap.cloud.security.token.validation.ValidationResult;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -23,7 +23,7 @@ public class JwtTimestampValidatorTest {
 	private JwtTimestampValidator cut;
 	private MockTokenBuilder tokenFactory;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		cut = new JwtTimestampValidator(() -> NOW, ONE_MINUTE);
 		tokenFactory = new MockTokenBuilder();

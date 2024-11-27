@@ -10,9 +10,9 @@ import com.sap.cloud.security.xsuaa.DummyXsuaaServiceConfiguration;
 import com.sap.cloud.security.xsuaa.XsuaaServiceConfiguration;
 import com.sap.cloud.security.xsuaa.test.JwtGenerator;
 import com.sap.cloud.security.xsuaa.token.TokenClaims;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
 import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult;
@@ -26,6 +26,7 @@ import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class XsuaaAudienceValidatorTest {
 
@@ -40,7 +41,7 @@ public class XsuaaAudienceValidatorTest {
 
 	private JWTClaimsSet.Builder claimsBuilder;
 
-	@Before
+	@BeforeEach
 	public void setup() throws IOException {
 		serviceConfigurationSameClientId = new DummyXsuaaServiceConfiguration("sb-test1!t1", "test1!t1");
 		serviceConfigurationOtherGrantedClientId = new DummyXsuaaServiceConfiguration("sb-test2!t1", "test2!t1");
@@ -58,14 +59,14 @@ public class XsuaaAudienceValidatorTest {
 	public void testSameClientId() {
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationSameClientId)
 				.validate(tokenWithAudience);
-		Assert.assertFalse(result.hasErrors());
+		Assertions.assertFalse(result.hasErrors());
 	}
 
 	@Test
 	public void testSameClientIdWithoutAudience() {
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationSameClientId)
 				.validate(tokenWithoutAudience);
-		Assert.assertFalse(result.hasErrors());
+		Assertions.assertFalse(result.hasErrors());
 	}
 
 	@Test
@@ -73,37 +74,37 @@ public class XsuaaAudienceValidatorTest {
 		Jwt token = new JwtGenerator()
 				.addScopes("test1!t1.read", "test2!t1.read", "test2!t1.write", ".scopeWithoutAppId").getToken();
 		Set<String> audiences = XsuaaAudienceValidator.getAllowedAudiences(token);
-		Assert.assertThat(audiences.size(), is(2));
-		Assert.assertThat(audiences, hasItem("test1!t1"));
-		Assert.assertThat(audiences, hasItem("test2!t1"));
+		assertThat(audiences.size(), is(2));
+		assertThat(audiences, hasItem("test1!t1"));
+		assertThat(audiences, hasItem("test2!t1"));
 	}
 
 	@Test
 	public void testOtherGrantedClientIdWithoutAudience() {
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationOtherGrantedClientId)
 				.validate(tokenWithoutAudience);
-		Assert.assertFalse(result.hasErrors());
+		Assertions.assertFalse(result.hasErrors());
 	}
 
 	@Test
 	public void testOtherGrantedClientIdWithoutAudienceAndDot() {
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(
 				new DummyXsuaaServiceConfiguration("sb-test4!t1", "test4!t1")).validate(tokenWithAudience);
-		Assert.assertFalse(result.hasErrors());
+		Assertions.assertFalse(result.hasErrors());
 	}
 
 	@Test
 	public void testOtherGrantedClientId() {
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationUnGrantedClientId)
 				.validate(tokenWithAudience);
-		Assert.assertTrue(result.hasErrors());
+		Assertions.assertTrue(result.hasErrors());
 	}
 
 	@Test
 	public void testUnGrantedClientId() {
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationUnGrantedClientId)
 				.validate(tokenWithAudience);
-		Assert.assertTrue(result.hasErrors());
+		Assertions.assertTrue(result.hasErrors());
 	}
 
 	@Test
@@ -115,7 +116,7 @@ public class XsuaaAudienceValidatorTest {
 		Jwt tokenWithoutAudienceButScopes = JwtGenerator.createFromClaims(claimsBuilder.build());
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationOtherGrantedClientId)
 				.validate(tokenWithoutAudienceButScopes);
-		Assert.assertFalse(result.hasErrors());
+		Assertions.assertFalse(result.hasErrors());
 	}
 
 	@Test
@@ -127,11 +128,11 @@ public class XsuaaAudienceValidatorTest {
 		Jwt tokenWithoutAudienceButScopes = JwtGenerator.createFromClaims(claimsBuilder.build());
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationOtherGrantedClientId)
 				.validate(tokenWithoutAudienceButScopes);
-		Assert.assertTrue(result.hasErrors());
+		Assertions.assertTrue(result.hasErrors());
 		List<OAuth2Error> errors = new ArrayList<>(result.getErrors());
 		String expectedDescription = "Jwt token with allowed audiences [test3!t1] matches none of these: [test2!t1]";
-		Assert.assertThat(errors.get(0).getDescription(), is(expectedDescription));
-		Assert.assertThat(errors.get(0).getErrorCode(), is(OAuth2ErrorCodes.INVALID_CLIENT));
+		assertThat(errors.get(0).getDescription(), is(expectedDescription));
+		assertThat(errors.get(0).getErrorCode(), is(OAuth2ErrorCodes.INVALID_CLIENT));
 	}
 
 	@Test
@@ -139,7 +140,7 @@ public class XsuaaAudienceValidatorTest {
 		Jwt tokenWithoutAudienceAndScopes = JwtGenerator.createFromClaims(claimsBuilder.build());
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationOtherGrantedClientId)
 				.validate(tokenWithoutAudienceAndScopes);
-		Assert.assertTrue(result.hasErrors());
+		Assertions.assertTrue(result.hasErrors());
 	}
 
 	@Test
@@ -148,7 +149,7 @@ public class XsuaaAudienceValidatorTest {
 		Jwt tokenWithoutAudienceAndScopes = JwtGenerator.createFromClaims(claimsBuilder.build());
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationOtherGrantedClientId)
 				.validate(tokenWithoutAudienceAndScopes);
-		Assert.assertTrue(result.hasErrors());
+		Assertions.assertTrue(result.hasErrors());
 	}
 
 	@Test
@@ -157,21 +158,21 @@ public class XsuaaAudienceValidatorTest {
 		Jwt tokenWithoutClientId = JwtGenerator.createFromClaims(claimsBuilder.build());
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationSameClientId)
 				.validate(tokenWithoutClientId);
-		Assert.assertTrue(result.hasErrors());
+		Assertions.assertTrue(result.hasErrors());
 	}
 
 	@Test
 	public void testBrokerCloneWithAudience() {
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationBrokerPlan)
 				.validate(cloneTokenWithAudience);
-		Assert.assertFalse(result.hasErrors());
+		Assertions.assertFalse(result.hasErrors());
 	}
 
 	@Test
 	public void testBrokerCloneWithoutAudience() {
 		OAuth2TokenValidatorResult result = new XsuaaAudienceValidator(serviceConfigurationBrokerPlan)
 				.validate(cloneTokenWithAudience);
-		Assert.assertFalse(result.hasErrors());
+		Assertions.assertFalse(result.hasErrors());
 	}
 
 }

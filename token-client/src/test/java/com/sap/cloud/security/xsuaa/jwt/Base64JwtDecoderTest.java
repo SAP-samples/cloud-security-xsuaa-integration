@@ -6,13 +6,11 @@
 package com.sap.cloud.security.xsuaa.jwt;
 
 import com.sap.cloud.security.xsuaa.test.JwtGenerator;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class Base64JwtDecoderTest {
 
@@ -27,9 +25,6 @@ public class Base64JwtDecoderTest {
 			.setJku(JKU_HEADER)
 			.getToken();
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-
 	@Test
 	public void itDecodesAnEncodedJwtString() {
 		String expectedDecodedJWTPayload = "{\"jti\":\"e3c30e2474cd46609a262eda9d9dc26d\",\"ext_attr\":{\"enhancer\":\"XSUAA\",\"zdn\":\"acme-enterprises\"},\"xs.system.attributes\":{\"xs.rolecollections\":[]},\"given_name\":\"Andrea Maria\",\"xs.user.attributes\":{},\"family_name\":\"Millsap\",\"sub\":\"1234\",\"scope\":[\"openid\",\"uaa.user\"],\"client_id\":\"my-app1\",\"cid\":\"my-app1\",\"azp\":\"my-app1\",\"grant_type\":\"authorization_code\",\"user_id\":\"1234\",\"origin\":\"ldap\",\"user_name\":\"am.millsap@sap.com\",\"email\":\"am.millsap@sap.com\",\"auth_time\":1564785720,\"rev_sig\":\"87e7c016\",\"iat\":1564785720,\"exp\":1564785721,\"iss\":\"http://acme-enterprises.example.com/uaa/oauth/token\",\"zid\":\"2345\",\"aud\":[\"my-app1\",\"uaa\",\"openid\"]}";
@@ -43,10 +38,10 @@ public class Base64JwtDecoderTest {
 
 	@Test
 	public void itThrowsIfJwtDoesNotConsistOfThreeSegments() {
-		expectedException.expect(IllegalArgumentException.class);
-		expectedException.expectMessage("JWT token does not consist of 'header'.'payload'.'signature'.");
+		Throwable exception = assertThrows(IllegalArgumentException.class, () ->
 
-		Base64JwtDecoder.getInstance().decode("invalid");
+			Base64JwtDecoder.getInstance().decode("invalid"));
+		assertTrue(exception.getMessage().contains("JWT token does not consist of 'header'.'payload'.'signature'."));
 	}
 
 	@Test

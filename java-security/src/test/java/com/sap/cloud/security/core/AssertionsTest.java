@@ -5,7 +5,7 @@
  */
 package com.sap.cloud.security.core;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.sap.cloud.security.xsuaa.Assertions.assertHasText;
 import static com.sap.cloud.security.xsuaa.Assertions.assertNotNull;
@@ -16,9 +16,8 @@ public class AssertionsTest {
 	@Test
 	public void assertNotNull_throwsIllegalArgumentExceptionContainingMessage() {
 		String message = "A message";
-		assertThatThrownBy(() -> {
-			assertNotNull(null, message);
-		}).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
+		assertThatThrownBy(() ->
+			assertNotNull(null, message)).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
 	}
 
 	@Test
@@ -29,17 +28,14 @@ public class AssertionsTest {
 	@Test
 	public void assertNotEmpty_throwsIllegalArgumentExceptionContainingMessage() {
 		String message = "A message";
-		assertThatThrownBy(() -> {
-			assertHasText(null, message);
-		}).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
+		assertThatThrownBy(() ->
+			assertHasText(null, message)).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
 
-		assertThatThrownBy(() -> {
-			assertHasText("", message);
-		}).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
+		assertThatThrownBy(() ->
+			assertHasText("", message)).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
 
-		assertThatThrownBy(() -> {
-			assertHasText("  ", message);
-		}).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
+		assertThatThrownBy(() ->
+			assertHasText("  ", message)).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
 	}
 
 	@Test

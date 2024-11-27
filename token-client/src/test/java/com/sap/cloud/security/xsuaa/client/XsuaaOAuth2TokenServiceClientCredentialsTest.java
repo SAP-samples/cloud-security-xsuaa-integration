@@ -13,12 +13,12 @@ import com.sap.cloud.security.config.ClientCredentials;
 import com.sap.cloud.security.config.ClientIdentity;
 import com.sap.cloud.security.servlet.MDCHelper;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.http.HttpEntity;
@@ -39,11 +39,12 @@ import static java.util.Collections.emptyMap;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class XsuaaOAuth2TokenServiceClientCredentialsTest {
 
 	OAuth2TokenService cut;
@@ -54,7 +55,7 @@ public class XsuaaOAuth2TokenServiceClientCredentialsTest {
 	@Mock
 	RestOperations mockRestOperations;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		cut = new XsuaaOAuth2TokenService(mockRestOperations);
 		clientIdentity = new ClientCredentials("clientid", "mysecretpassword");
@@ -77,20 +78,24 @@ public class XsuaaOAuth2TokenServiceClientCredentialsTest {
 				.isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("clientIdentity");
 	}
 
-	@Test(expected = OAuth2ServiceException.class)
-	public void retrieveToken_throwsIfHttpStatusUnauthorized() throws OAuth2ServiceException {
-		Mockito.when(mockRestOperations.postForEntity(any(URI.class), any(HttpEntity.class), eq(Map.class)))
-				.thenThrow(new HttpClientErrorException(HttpStatus.UNAUTHORIZED));
-		cut.retrieveAccessTokenViaClientCredentialsGrant(tokenEndpoint, clientIdentity, null,
-				null, null, false);
+	@Test
+	public void retrieveToken_throwsIfHttpStatusUnauthorized() {
+		assertThrows(OAuth2ServiceException.class, () -> {
+			Mockito.when(mockRestOperations.postForEntity(any(URI.class), any(HttpEntity.class), eq(Map.class)))
+					.thenThrow(new HttpClientErrorException(HttpStatus.UNAUTHORIZED));
+			cut.retrieveAccessTokenViaClientCredentialsGrant(tokenEndpoint, clientIdentity, null,
+					null, null, false);
+		});
 	}
 
-	@Test(expected = OAuth2ServiceException.class)
-	public void retrieveToken_throwsIfHttpStatusNotOk() throws OAuth2ServiceException {
-		Mockito.when(mockRestOperations.postForEntity(any(URI.class), any(HttpEntity.class), eq(Map.class)))
-				.thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
-		cut.retrieveAccessTokenViaClientCredentialsGrant(tokenEndpoint, clientIdentity,
-				null, null, null, false);
+	@Test
+	public void retrieveToken_throwsIfHttpStatusNotOk() {
+		assertThrows(OAuth2ServiceException.class, () -> {
+			Mockito.when(mockRestOperations.postForEntity(any(URI.class), any(HttpEntity.class), eq(Map.class)))
+					.thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
+			cut.retrieveAccessTokenViaClientCredentialsGrant(tokenEndpoint, clientIdentity,
+					null, null, null, false);
+		});
 	}
 
 	@Test

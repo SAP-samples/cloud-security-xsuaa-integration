@@ -12,7 +12,6 @@
         <version>3.5.5</version>
     </parent>
 
-    <groupId>com.sap.cloud.security.xsuaa</groupId>
     <artifactId>spring-security-compatibility</artifactId>
     <name>spring-security-compatibility</name>
     <packaging>jar</packaging>
@@ -46,11 +45,12 @@
             <groupId>com.sap.cloud.security</groupId>
             <artifactId>java-security-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -60,6 +60,11 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

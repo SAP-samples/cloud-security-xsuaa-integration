@@ -19,6 +19,10 @@ import org.junit.rules.ExternalResource;
 
 import javax.annotation.Nullable;
 
+@Deprecated(since = "3.6.0", forRemoval = true)
+/**
+ * @deprecated since 3.6.0. Use {@link XsuaaExtension.class} or {@link IasExtension.class} in a JUnit5 test instead.
+ */
 public class SecurityTestRule extends ExternalResource
 		implements SecurityTestContext, ServiceMockConfiguration, ApplicationServerConfiguration {
 

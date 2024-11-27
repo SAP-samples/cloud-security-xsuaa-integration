@@ -6,8 +6,8 @@
 package com.sap.cloud.security.xsuaa.extractor;
 
 import com.sap.cloud.security.xsuaa.token.XsuaaToken;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -21,7 +21,7 @@ public class LocalAuthoritiesExtractorTest {
 	XsuaaToken token;
 	Collection<String> scopes = new HashSet<>();
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		cut = new LocalAuthoritiesExtractor("appId!1234");
 

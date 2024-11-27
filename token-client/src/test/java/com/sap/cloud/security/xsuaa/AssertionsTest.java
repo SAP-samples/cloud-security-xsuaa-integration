@@ -5,7 +5,7 @@
  */
 package com.sap.cloud.security.xsuaa;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,9 +17,8 @@ public class AssertionsTest {
 	@Test
 	public void assertNotNull_throwsIllegalArgumentExceptionContainingMessage() {
 		String message = "A message";
-		assertThatThrownBy(() -> {
-			Assertions.assertNotNull(null, message);
-		}).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
+		assertThatThrownBy(() ->
+			Assertions.assertNotNull(null, message)).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
 	}
 
 	@Test
@@ -30,17 +29,14 @@ public class AssertionsTest {
 	@Test
 	public void assertHasText_throwsIllegalArgumentExceptionContainingMessage() {
 		String message = "A message";
-		assertThatThrownBy(() -> {
-			Assertions.assertHasText(null, message);
-		}).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
+		assertThatThrownBy(() ->
+			Assertions.assertHasText(null, message)).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
 
-		assertThatThrownBy(() -> {
-			Assertions.assertHasText("", message);
-		}).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
+		assertThatThrownBy(() ->
+			Assertions.assertHasText("", message)).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
 
-		assertThatThrownBy(() -> {
-			Assertions.assertHasText("  ", message);
-		}).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
+		assertThatThrownBy(() ->
+			Assertions.assertHasText("  ", message)).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
 	}
 
 	@Test
@@ -56,12 +52,10 @@ public class AssertionsTest {
 	@Test
 	public void assertNotEmpty_throwsIllegalArgumentExceptionContainingMessage() {
 		String message = "A message";
-		assertThatThrownBy(() -> {
-			Assertions.assertNotEmpty(null, message);
-		}).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
+		assertThatThrownBy(() ->
+			Assertions.assertNotEmpty(null, message)).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
 
-		assertThatThrownBy(() -> {
-			Assertions.assertNotEmpty(new ArrayList<>(), message);
-		}).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
+		assertThatThrownBy(() ->
+			Assertions.assertNotEmpty(new ArrayList<>(), message)).isInstanceOf(IllegalArgumentException.class).hasMessage(message);
 	}
 }

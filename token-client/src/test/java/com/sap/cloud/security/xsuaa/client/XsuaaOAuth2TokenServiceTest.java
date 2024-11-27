@@ -6,20 +6,26 @@
 package com.sap.cloud.security.xsuaa.client;
 
 import com.sap.cloud.security.xsuaa.tokenflows.TokenCacheConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.web.client.RestOperations;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class XsuaaOAuth2TokenServiceTest {
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void initialize_throwsIfRestOperationsIsNull() {
-		new XsuaaOAuth2TokenService(null, TokenCacheConfiguration.cacheDisabled());
+		assertThrows(IllegalArgumentException.class, () -> {
+			new XsuaaOAuth2TokenService(null, TokenCacheConfiguration.cacheDisabled());
+		});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void initialize_throwsIfCacheConfigurationIsNull() {
-		new XsuaaOAuth2TokenService(Mockito.mock(RestOperations.class), null);
+		assertThrows(IllegalArgumentException.class, () -> {
+			new XsuaaOAuth2TokenService(Mockito.mock(RestOperations.class), null);
+		});
 	}
 
 }
