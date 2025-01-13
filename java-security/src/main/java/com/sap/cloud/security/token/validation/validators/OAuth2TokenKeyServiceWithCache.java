@@ -151,10 +151,19 @@ class OAuth2TokenKeyServiceWithCache implements Cacheable {
 		assertHasText(keyParameters.keyId(), "keyId must not be null.");
 		assertNotNull(keyParameters.keyUri(), "keyUrl must not be null.");
 
-		JsonWebKeySet jwks = getCache().getIfPresent(cacheKey.toString());
+		// using an array to remember OAuth exceptions in lambda because variable needs to be effectively final
+		OAuth2ServiceException[] oAuthException = new OAuth2ServiceException[1];
+		JsonWebKeySet jwks = getCache().get(cacheKey.toString(), k -> {
+			try {
+				return retrieveTokenKeys(cacheKey, requestParameters);
+			} catch (OAuth2ServiceException e) {
+				oAuthException[0] = e;
+				return null;
+			}
+		});
 
-		if (jwks == null) {
-			jwks = retrieveTokenKeysAndUpdateCache(cacheKey, requestParameters);
+		if(oAuthException[0] != null) {
+			throw oAuthException[0];
 		}
 
 		if (jwks.getAll().isEmpty()) {
@@ -172,14 +181,11 @@ class OAuth2TokenKeyServiceWithCache implements Cacheable {
 		throw new IllegalArgumentException("Key with kid " + keyParameters.keyId + " not found in JWKS.");
 	}
 
-	private JsonWebKeySet retrieveTokenKeysAndUpdateCache(CacheKey cacheKey, Map<String, String> params)
+	private JsonWebKeySet retrieveTokenKeys(CacheKey cacheKey, Map<String, String> params)
 			throws OAuth2ServiceException {
 		String jwksJson = getTokenKeyService().retrieveTokenKeys(cacheKey.keyUri(), params);
 
-		JsonWebKeySet keySet = JsonWebKeySetFactory.createFromJson(jwksJson);
-		getCache().put(cacheKey.toString(), keySet);
-
-		return keySet;
+		return JsonWebKeySetFactory.createFromJson(jwksJson);
 	}
 
 	private TokenKeyCacheConfiguration getCheckedConfiguration(CacheConfiguration cacheConfiguration) {
@@ -215,6 +221,7 @@ class OAuth2TokenKeyServiceWithCache implements Cacheable {
 		if (cache == null) {
 			Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder()
 					.ticker(cacheTicker)
+					.refreshAfterWrite(getCacheConfiguration().getCacheDuration().dividedBy(2))
 					.expireAfterWrite(getCacheConfiguration().getCacheDuration())
 					.maximumSize(getCacheConfiguration().getCacheSize());
 			if (getCacheConfiguration().isCacheStatisticsEnabled()) {
