@@ -61,4 +61,4 @@ This comes with a change regarding scopes. For a business application A that wan
 In case you face issues to apply the migration steps check this [troubleshooting](README.md#troubleshooting) for known issues and how to file the issue.
 
 ## [OPTIONAL] Leverage new API and features
-You can continue [here](Migration_SAPJavaBuildpackProjects_V2.md) to understand what needs to be done to leverage the new `java-api` that is exposed by the SAP Java Buildpack as of version `1.26.1`.
+You can continue [here](Migration_SAPJavaBuildpackProjects_V2.md) to understand what needs to be done to leverage the new `java-api` that is exposed by the SAP Java Buildpack starting with version `1.26.1`.

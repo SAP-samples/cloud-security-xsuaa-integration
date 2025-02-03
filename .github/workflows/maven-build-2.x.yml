@@ -48,8 +48,8 @@ jobs:
         run: cd samples/spring-security-basic-auth; mvn -B package --file pom.xml
       - name: Build spring-security-xsuaa-usage
         run: cd samples/spring-security-xsuaa-usage; mvn -B package --file pom.xml
-      - name: Build spring-webflux-security-hybrid-usage
-        run: cd samples/spring-webflux-security-hybrid-usage; mvn -B package --file pom.xml
+      - name: Build spring-webflux-security-xsuaa-usage
+        run: cd samples/spring-webflux-security-xsuaa-usage; mvn -B package --file pom.xml
       - name: Build java-security-usage
         run: cd samples/java-security-usage; mvn -B package --file pom.xml
       - name: Build sap-java-buildpack-api-usage
