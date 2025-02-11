@@ -63,7 +63,7 @@
 		<spring.security.oauth2.version>2.5.2.RELEASE</spring.security.oauth2.version>
 		<spring.security.jwt.version>1.1.1.RELEASE</spring.security.jwt.version>
 		<org.eclipse.jetty.version>12.0.16</org.eclipse.jetty.version>
-		<reactor.version>3.7.2</reactor.version>
+		<reactor.version>3.7.3</reactor.version>
 		<log4j2.version>2.24.3</log4j2.version>
 		<slf4j.api.version>2.0.16</slf4j.api.version> <!--see also here http://www.slf4j.org/faq.html#changesInVersion18 -->
 		<org.json.version>20250107</org.json.version>
