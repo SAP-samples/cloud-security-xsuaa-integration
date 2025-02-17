@@ -83,7 +83,7 @@
 		<wiremock.version>3.9.2</wiremock.version>
 		<javax.annotation.version>1.3.2</javax.annotation.version>
 		<spotbugs.annotations.version>4.8.6</spotbugs.annotations.version>
-		<spotbugs.version>4.8.6.6</spotbugs.version>
+		<spotbugs.version>4.9.1.0</spotbugs.version>
 		<skipTests>false</skipTests>
 		<jacoco.skip>${skipTests}</jacoco.skip>
 	</properties>
